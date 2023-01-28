@@ -39,6 +39,7 @@ public class SecurityConfiguration {
         return http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/users").hasAuthority(ERole.ROLE_ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/users").hasAuthority(ERole.ROLE_ADMIN.name())
                 .antMatchers(HttpMethod.PUT, "/users/**").hasAuthority(ERole.ROLE_ADMIN.name())
                 .antMatchers(HttpMethod.GET, "/users/**").hasAuthority(ERole.ROLE_ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/users/authenticate").permitAll()

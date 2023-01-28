@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 public interface UserService extends UserDetailsService {
 
@@ -16,6 +17,8 @@ public interface UserService extends UserDetailsService {
     UserResponse updateUser(String publicId, UserRequest userRequest, Authentication authenticatedUser) throws AccessDeniedException;
 
     UserResponse getUserByPublicId(String publicId);
+
+    List<UserResponse> getAllUsers();
 
     void createAdmin();
 
