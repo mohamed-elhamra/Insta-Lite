@@ -23,8 +23,8 @@ import javax.validation.Valid;
 @AllArgsConstructor
 public class UserController {
 
-    UserService userService;
-    AuthenticationManager authenticationManager;
+    private UserService userService;
+    private AuthenticationManager authenticationManager;
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {

@@ -12,9 +12,6 @@ import com.instalite.api.entities.UserEntity;
 import com.instalite.api.repositories.UserRepository;
 import com.instalite.api.services.interfaces.UserService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,10 +30,10 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    UserRepository userRepository;
-    UserMapper userMapper;
-    IDGenerator idGenerator;
-    JwtService jwtService;
+    private UserRepository userRepository;
+    private UserMapper userMapper;
+    private IDGenerator idGenerator;
+    private JwtService jwtService;
 
     @Override
     public UserDetails loadUserByUsername(String email) {
