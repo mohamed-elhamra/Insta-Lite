@@ -7,9 +7,13 @@ import com.instalite.api.dtos.responses.UserResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.nio.file.AccessDeniedException;
+
 public interface UserService extends UserDetailsService {
 
     UserResponse createUser(UserRequest userRequest);
+
+    UserResponse updateUser(String publicId, UserRequest userRequest, Authentication authenticatedUser) throws AccessDeniedException;
 
     void createAdmin();
 
