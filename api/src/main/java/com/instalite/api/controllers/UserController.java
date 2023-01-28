@@ -43,4 +43,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updateUser(publicId, userRequest, authentication));
     }
 
+    @GetMapping("/{publicId}")
+    public ResponseEntity<UserResponse> getUserByPublicId(@PathVariable String publicId){
+        return ResponseEntity.ok(userService.getUserByPublicId(publicId));
+    }
+
 }

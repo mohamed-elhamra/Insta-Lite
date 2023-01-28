@@ -91,6 +91,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponse getUserByPublicId(String publicId) {
+        UserEntity user = userRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with this id: " + publicId));
+        return userMapper.toUserResponse(user);
+    }
+
+    @Override
     public void createAdmin() {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         Optional<UserEntity> user = userRepository.findByRole(ERole.ROLE_ADMIN);

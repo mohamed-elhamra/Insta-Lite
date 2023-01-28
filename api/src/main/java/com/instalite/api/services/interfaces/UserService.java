@@ -15,6 +15,8 @@ public interface UserService extends UserDetailsService {
 
     UserResponse updateUser(String publicId, UserRequest userRequest, Authentication authenticatedUser) throws AccessDeniedException;
 
+    UserResponse getUserByPublicId(String publicId);
+
     void createAdmin();
 
     AuthResponse authenticateUser(AuthRequest authRequest, Authentication authentication);
