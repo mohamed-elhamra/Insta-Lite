@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -46,6 +47,17 @@ public class UserController {
     @GetMapping("/{publicId}")
     public ResponseEntity<UserResponse> getUserByPublicId(@PathVariable String publicId){
         return ResponseEntity.ok(userService.getUserByPublicId(publicId));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserResponse>> getAllUsers(){
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @DeleteMapping("/{publicId}")
+    public ResponseEntity<String> deleteUser(@PathVariable String publicId){
+        userService.deleteUser(publicId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

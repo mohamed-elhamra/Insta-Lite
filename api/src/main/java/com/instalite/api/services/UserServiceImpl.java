@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -95,6 +96,18 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with this id: " + publicId));
         return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    public List<UserResponse> getAllUsers() {
+        return userMapper.toUserResponseList(userRepository.findAll());
+    }
+
+    @Override
+    public void deleteUser(String publicId) {
+        UserEntity user = userRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with this id: " + publicId));
+        userRepository.delete(user);
     }
 
     @Override
