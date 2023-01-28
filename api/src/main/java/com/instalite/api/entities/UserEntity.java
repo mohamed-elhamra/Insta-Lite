@@ -31,6 +31,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String encryptedPassword;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ERole role;
 

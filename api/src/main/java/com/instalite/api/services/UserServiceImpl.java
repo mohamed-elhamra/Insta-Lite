@@ -2,6 +2,7 @@ package com.instalite.api.services;
 
 import com.instalite.api.commons.exceptions.InstaLiteException;
 import com.instalite.api.commons.mappers.UserMapper;
+import com.instalite.api.commons.utils.Constants;
 import com.instalite.api.commons.utils.ERole;
 import com.instalite.api.commons.utils.IDGenerator;
 import com.instalite.api.dtos.requests.AuthRequest;
@@ -63,6 +64,24 @@ public class UserServiceImpl implements UserService {
         createdUser.setRole(ERole.ROLE_USER);
 
         return userMapper.toUserResponse(userRepository.save(createdUser));
+    }
+
+    @Override
+    public void createAdmin() {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        Optional<UserEntity> user = userRepository.findByRole(ERole.ROLE_ADMIN);
+
+        if (user.isEmpty()) {
+            UserEntity admin = new UserEntity();
+            admin.setPublicId(idGenerator.generateStringId());
+            admin.setFirstName(Constants.ADMIN_FIRST_NAME);
+            admin.setLastName(Constants.ADMIN_LAST_NAME);
+            admin.setEmail(Constants.ADMIN_EMAIL);
+            admin.setEncryptedPassword(bCryptPasswordEncoder.encode(Constants.ADMIN_PASSWORD));
+            admin.setRole(ERole.ROLE_ADMIN);
+
+            userRepository.save(admin);
+        }
     }
 
     @Override
