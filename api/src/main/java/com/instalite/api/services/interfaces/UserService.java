@@ -11,6 +11,8 @@ public interface UserService extends UserDetailsService {
 
     UserResponse createUser(UserRequest userRequest);
 
+    void createAdmin();
+
     AuthResponse authenticateUser(AuthRequest authRequest, Authentication authentication);
 
 }
