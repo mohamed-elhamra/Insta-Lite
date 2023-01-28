@@ -22,7 +22,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -55,7 +57,7 @@ public class UserServiceImpl implements UserService {
         Optional<UserEntity> userByEmail = userRepository.findByEmail(userRequest.getEmail());
 
         userByEmail.ifPresent(user -> {
-            throw new InstaLiteException("User already exits with this email");
+            throw new InstaLiteException("User already exits with this email: " + userByEmail.get().getEmail());
         });
 
         UserEntity createdUser = userMapper.toUserEntity(userRequest);
@@ -64,6 +66,28 @@ public class UserServiceImpl implements UserService {
         createdUser.setRole(ERole.ROLE_USER);
 
         return userMapper.toUserResponse(userRepository.save(createdUser));
+    }
+
+    @Override
+    public UserResponse updateUser(String publicId, UserRequest userRequest, Authentication authenticatedUser) throws AccessDeniedException {
+        boolean isEmailsEquals = userRequest.getEmail().equals(authenticatedUser.getName());
+        boolean isAdmin = authenticatedUser.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(ERole.ROLE_ADMIN.name()));
+
+        UserEntity user;
+        if(isEmailsEquals || isAdmin){
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            user = userRepository.findByPublicId(publicId)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with this id: " + publicId));
+            user.setFirstName(userRequest.getFirstName());
+            user.setLastName(userRequest.getLastName());
+            user.setEmail(userRequest.getEmail());
+            user.setEncryptedPassword(bCryptPasswordEncoder.encode(userRequest.getPassword()));
+        }else {
+            throw new AccessDeniedException("You are not allowed to update users.");
+        }
+
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
     @Override

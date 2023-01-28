@@ -1,5 +1,6 @@
 package com.instalite.api.configurations;
 
+import com.instalite.api.commons.utils.ERole;
 import com.instalite.api.filters.AuthorizationFilter;
 import com.instalite.api.services.interfaces.UserService;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/users").permitAll()
+                .antMatchers(HttpMethod.POST, "/users").hasAuthority(ERole.ROLE_ADMIN.name())
+                .antMatchers(HttpMethod.PUT, "/users").hasAuthority(ERole.ROLE_ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/users/authenticate").permitAll()
                 .anyRequest().authenticated()
                 .and()
