@@ -20,6 +20,8 @@ public interface UserService extends UserDetailsService {
 
     List<UserResponse> getAllUsers();
 
+    void deleteUser(String publicId);
+
     void createAdmin();
 
     AuthResponse authenticateUser(AuthRequest authRequest, Authentication authentication);

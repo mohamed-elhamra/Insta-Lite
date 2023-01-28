@@ -54,4 +54,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    @DeleteMapping("/{publicId}")
+    public ResponseEntity<String> deleteUser(@PathVariable String publicId){
+        userService.deleteUser(publicId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

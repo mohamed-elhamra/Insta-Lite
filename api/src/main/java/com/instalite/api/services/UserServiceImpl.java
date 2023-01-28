@@ -104,6 +104,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteUser(String publicId) {
+        UserEntity user = userRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with this id: " + publicId));
+        userRepository.delete(user);
+    }
+
+    @Override
     public void createAdmin() {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         Optional<UserEntity> user = userRepository.findByRole(ERole.ROLE_ADMIN);

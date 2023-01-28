@@ -42,6 +42,7 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.GET, "/users").hasAuthority(ERole.ROLE_ADMIN.name())
                 .antMatchers(HttpMethod.PUT, "/users/**").hasAuthority(ERole.ROLE_ADMIN.name())
                 .antMatchers(HttpMethod.GET, "/users/**").hasAuthority(ERole.ROLE_ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, "/users/**").hasAuthority(ERole.ROLE_ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/users/authenticate").permitAll()
                 .anyRequest().authenticated()
                 .and()
