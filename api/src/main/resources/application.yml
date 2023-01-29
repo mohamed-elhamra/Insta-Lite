@@ -2,6 +2,7 @@ server:
   servlet:
     context-path: /api/instalite/v1.0
   port: 8080
+  address: localhost
 
 spring:
   jpa:

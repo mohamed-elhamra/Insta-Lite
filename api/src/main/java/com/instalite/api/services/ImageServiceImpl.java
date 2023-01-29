@@ -47,6 +47,8 @@ public class ImageServiceImpl implements ImageService {
         try{
             UserEntity connectedUser = userRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new UsernameNotFoundException("User with this email: " + authentication.getName() + " not connected"));
+            if(imageRepository.findByTitle(imageTitle).isPresent())
+                throw new InstaLiteException("There is already an image with this title : " + imageTitle);
             String imageExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
 
             if(Constants.ALLOWED_EXTENSIONS.contains(imageExtension)){
@@ -71,5 +73,7 @@ public class ImageServiceImpl implements ImageService {
         }
         if(isFolderCreated) System.out.println("Folder created");
     }
+
+
 
 }
