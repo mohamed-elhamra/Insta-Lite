@@ -1,5 +1,8 @@
 package com.instalite.api.commons.utils;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Constants {
 
     public static final long EXPIRATION_TIME = 864_000_000; // 10 Days
@@ -11,5 +14,6 @@ public class Constants {
     public static final String ADMIN_LAST_NAME = "admin";
     public static final String ADMIN_EMAIL = "admin@gmail.com";
     public static final String ADMIN_PASSWORD = "admin123456";
+    public static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("JPEG", "PNG", "JPG", "jpeg", "png", "jpg");
 
 }

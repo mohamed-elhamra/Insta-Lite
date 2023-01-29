@@ -22,8 +22,8 @@ public class ImageEntity {
     @Column(length = 60, nullable = false, unique = true)
     private String title;
 
-    @Column(nullable = false)
-    private String url;
+    @Column(nullable = false, unique = true)
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
