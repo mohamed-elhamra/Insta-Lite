@@ -20,11 +20,12 @@ public class ImageController {
 
 
     @PostMapping
-    public ResponseEntity<ImageResponse> uploadImage(@RequestParam("image_title") String imageTitle,
+    public ResponseEntity<ImageResponse> uploadImage(@RequestParam(name= "image_title") String imageTitle,
+                                                     @RequestParam("visibility") String visibility,
                                                      @RequestParam("image") MultipartFile image,
                                                      Authentication authentication) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(imageService.uploadImage(imageTitle, image, authentication));
+                .body(imageService.uploadImage(imageTitle, visibility, image, authentication));
     }
 
     @GetMapping("/download/{imageId}")

@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
 
-    ImageResponse uploadImage(String imageTitle, MultipartFile image, Authentication authentication);
+    ImageResponse uploadImage(String imageTitle, String visibility, MultipartFile image, Authentication authentication);
 
     Resource downloadImage(String imageId);
 
