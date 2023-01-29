@@ -4,6 +4,7 @@ import com.instalite.api.commons.utils.ERole;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Setter
@@ -35,5 +36,8 @@ public class UserEntity {
     @Column(nullable = false)
     private ERole role;
 
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    private Set<ImageEntity> image;
 
 }
