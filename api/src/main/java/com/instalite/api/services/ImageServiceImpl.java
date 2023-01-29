@@ -4,6 +4,7 @@ import com.instalite.api.commons.exceptions.InstaLiteException;
 import com.instalite.api.commons.mappers.ImageMapper;
 import com.instalite.api.commons.utils.Constants;
 import com.instalite.api.commons.utils.IDGenerator;
+import com.instalite.api.commons.utils.enums.EVisibility;
 import com.instalite.api.dtos.responses.ImageResponse;
 import com.instalite.api.entities.ImageEntity;
 import com.instalite.api.entities.UserEntity;
@@ -50,7 +51,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
-    public ImageResponse uploadImage(String imageTitle, MultipartFile image, Authentication authentication) {
+    public ImageResponse uploadImage(String imageTitle, String visibility, MultipartFile image, Authentication authentication) {
         try{
             UserEntity connectedUser = userRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new UsernameNotFoundException("User with this email: " + authentication.getName() + " not connected"));
@@ -61,7 +62,7 @@ public class ImageServiceImpl implements ImageService {
             if(Constants.ALLOWED_EXTENSIONS.contains(imageExtension)){
                 String imagePublicId = idGenerator.generateStringId();
                 String imageName = imagePublicId + "." + imageExtension;
-                ImageEntity imageEntity = new ImageEntity(null, imagePublicId, imageTitle, imageName, connectedUser);
+                ImageEntity imageEntity = new ImageEntity(null, imagePublicId, imageTitle, imageName, EVisibility.fromValue(visibility), connectedUser);
                 Files.copy(image.getInputStream(), this.folder.resolve(imageName));
 
                 ImageResponse imageResponse = imageMapper.toImageResponse(imageRepository.save(imageEntity));

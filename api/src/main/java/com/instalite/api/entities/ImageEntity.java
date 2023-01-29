@@ -1,5 +1,6 @@
 package com.instalite.api.entities;
 
+import com.instalite.api.commons.utils.enums.EVisibility;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,6 +25,10 @@ public class ImageEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EVisibility visibility;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
