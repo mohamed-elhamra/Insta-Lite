@@ -3,13 +3,12 @@ package com.instalite.api.controllers;
 import com.instalite.api.dtos.responses.ImageResponse;
 import com.instalite.api.services.interfaces.ImageService;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -25,5 +24,14 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(imageService.uploadImage(imageTitle, image, authentication));
     }
+
+    @GetMapping("/download/{imageId}")
+    public ResponseEntity<Resource> getImage(@PathVariable String imageId, Authentication authentication) {
+        Resource image = imageService.downloadImage(imageId, authentication);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getFilename() + "\"")
+                .body(image);
+    }
+
 
 }
