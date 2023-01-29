@@ -77,7 +77,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Resource downloadImage(String imageId, Authentication authentication) {
+    public Resource downloadImage(String imageId) {
         try{
             ImageEntity imageEntity = imageRepository.findByPublicId(imageId)
                     .orElseThrow(() -> new RuntimeException("Image not found with this id: " + imageId));

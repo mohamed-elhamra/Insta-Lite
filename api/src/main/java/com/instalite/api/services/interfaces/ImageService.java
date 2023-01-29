@@ -9,6 +9,6 @@ public interface ImageService {
 
     ImageResponse uploadImage(String imageTitle, MultipartFile image, Authentication authentication);
 
-    Resource downloadImage(String imageId, Authentication authentication);
+    Resource downloadImage(String imageId);
 
 }

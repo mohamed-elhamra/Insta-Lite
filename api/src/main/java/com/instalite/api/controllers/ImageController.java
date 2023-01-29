@@ -20,14 +20,16 @@ public class ImageController {
 
 
     @PostMapping
-    public ResponseEntity<ImageResponse> uploadImage(@RequestParam("image_title") String imageTitle, @RequestParam("image") MultipartFile image, Authentication authentication) {
+    public ResponseEntity<ImageResponse> uploadImage(@RequestParam("image_title") String imageTitle,
+                                                     @RequestParam("image") MultipartFile image,
+                                                     Authentication authentication) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(imageService.uploadImage(imageTitle, image, authentication));
     }
 
     @GetMapping("/download/{imageId}")
-    public ResponseEntity<Resource> getImage(@PathVariable String imageId, Authentication authentication) {
-        Resource image = imageService.downloadImage(imageId, authentication);
+    public ResponseEntity<Resource> downloadImage(@PathVariable String imageId) {
+        Resource image = imageService.downloadImage(imageId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getFilename() + "\"")
                 .body(image);
