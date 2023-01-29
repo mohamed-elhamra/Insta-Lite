@@ -10,7 +10,7 @@ import com.instalite.api.entities.UserEntity;
 import com.instalite.api.repositories.ImageRepository;
 import com.instalite.api.repositories.UserRepository;
 import com.instalite.api.services.interfaces.ImageService;
-import lombok.AllArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -31,14 +31,18 @@ public class ImageServiceImpl implements ImageService {
     private final UserRepository userRepository;
     private final IDGenerator idGenerator;
     private final Path folder;
+    private final Environment environment;
+    private String host;
 
-    public ImageServiceImpl(ImageRepository imageRepository, ImageMapper imageMapper, UserRepository userRepository, IDGenerator idGenerator) {
+    public ImageServiceImpl(ImageRepository imageRepository, ImageMapper imageMapper, UserRepository userRepository, IDGenerator idGenerator, Environment environment) {
         this.imageRepository = imageRepository;
         this.imageMapper = imageMapper;
         this.userRepository = userRepository;
         this.idGenerator = idGenerator;
+        this.environment = environment;
         this.folder = Paths.get("src/main/resources/static/images");
-        createFolderIfNotExits(this.folder);
+        this.createFolderIfNotExits(this.folder);
+        this.instantiateHost();
     }
 
     @Override
@@ -57,7 +61,9 @@ public class ImageServiceImpl implements ImageService {
                 ImageEntity imageEntity = new ImageEntity(null, imagePublicId, imageTitle, imageName, connectedUser);
                 Files.copy(image.getInputStream(), this.folder.resolve(imageName));
 
-                return imageMapper.toImageResponse(imageRepository.save(imageEntity));
+                ImageResponse imageResponse = imageMapper.toImageResponse(imageRepository.save(imageEntity));
+                imageResponse.setUrl(this.host + imageResponse.getPublicId());
+                return imageResponse;
             }else{
                 throw new InstaLiteException("File extension allowed (png, jpeg, jpg)");
             }
@@ -74,6 +80,10 @@ public class ImageServiceImpl implements ImageService {
         if(isFolderCreated) System.out.println("Folder created");
     }
 
-
+    private void instantiateHost(){
+        String port = environment.getProperty("server.port");
+        String address = environment.getProperty("server.address");
+        this.host = "http://" + address + ":" + port + "/api/images/";
+    }
 
 }
