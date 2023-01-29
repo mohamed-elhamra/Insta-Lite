@@ -3,6 +3,7 @@ package com.instalite.api.services;
 import com.instalite.api.commons.exceptions.InstaLiteException;
 import com.instalite.api.commons.mappers.ImageMapper;
 import com.instalite.api.commons.utils.Constants;
+import com.instalite.api.commons.utils.ERole;
 import com.instalite.api.commons.utils.IDGenerator;
 import com.instalite.api.dtos.responses.ImageResponse;
 import com.instalite.api.entities.ImageEntity;
@@ -11,6 +12,8 @@ import com.instalite.api.repositories.ImageRepository;
 import com.instalite.api.repositories.UserRepository;
 import com.instalite.api.services.interfaces.ImageService;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -72,6 +76,23 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
+    @Override
+    public Resource downloadImage(String imageId) {
+        try{
+            ImageEntity imageEntity = imageRepository.findByPublicId(imageId)
+                    .orElseThrow(() -> new RuntimeException("Image not found with this id: " + imageId));
+            Path image = this.folder.resolve(imageEntity.getName());
+            Resource resource = new UrlResource(image.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new InstaLiteException("Could not read the image with id: " + imageId);
+            }
+        } catch (MalformedURLException e) {
+            throw new InstaLiteException("Error: " + e.getMessage());
+        }
+    }
+
     private void createFolderIfNotExits(Path folder){
         boolean isFolderCreated = false;
         if(!folder.toFile().exists()) {
@@ -83,7 +104,9 @@ public class ImageServiceImpl implements ImageService {
     private void instantiateHost(){
         String port = environment.getProperty("server.port");
         String address = environment.getProperty("server.address");
-        this.host = "http://" + address + ":" + port + "/api/images/";
+        String contextPath = environment.getProperty("server.servlet.context-path");
+
+        this.host = "http://" + address + ":" + port + contextPath + "/images/download/";
     }
 
 }

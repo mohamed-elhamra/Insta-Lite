@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /api/instalite/v1.0
+    context-path: /api/v1.0
   port: 8080
   address: localhost
 
@@ -18,8 +18,13 @@ spring:
     password:
     driver-class-name: com.mysql.jdbc.Driver
 
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
+
 logging:
   level:
     root: INFO
     com:
-      boutique: TRACE
+      instalite: TRACE
