@@ -1,4 +1,4 @@
-package com.instalite.api.commons.utils;
+package com.instalite.api.commons.utils.enums;
 
 public enum ERole {
     ROLE_ADMIN,

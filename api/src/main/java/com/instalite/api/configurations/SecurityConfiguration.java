@@ -1,6 +1,6 @@
 package com.instalite.api.configurations;
 
-import com.instalite.api.commons.utils.ERole;
+import com.instalite.api.commons.utils.enums.ERole;
 import com.instalite.api.filters.AuthorizationFilter;
 import com.instalite.api.services.interfaces.UserService;
 import lombok.AllArgsConstructor;

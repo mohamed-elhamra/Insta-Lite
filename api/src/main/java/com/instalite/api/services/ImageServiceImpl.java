@@ -3,7 +3,6 @@ package com.instalite.api.services;
 import com.instalite.api.commons.exceptions.InstaLiteException;
 import com.instalite.api.commons.mappers.ImageMapper;
 import com.instalite.api.commons.utils.Constants;
-import com.instalite.api.commons.utils.ERole;
 import com.instalite.api.commons.utils.IDGenerator;
 import com.instalite.api.dtos.responses.ImageResponse;
 import com.instalite.api.entities.ImageEntity;

@@ -1,6 +1,6 @@
 package com.instalite.api.entities;
 
-import com.instalite.api.commons.utils.ERole;
+import com.instalite.api.commons.utils.enums.ERole;
 import lombok.*;
 
 import javax.persistence.*;
