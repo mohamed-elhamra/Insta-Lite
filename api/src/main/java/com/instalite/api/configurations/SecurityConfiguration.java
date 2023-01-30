@@ -44,6 +44,7 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.DELETE, "/users/**").hasAuthority(ERole.ROLE_ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/users/authenticate").permitAll()
                 .antMatchers(HttpMethod.GET, "/images/download/**").hasAuthority(ERole.ROLE_ADMIN.name())
+                .antMatchers(HttpMethod.PATCH, "/images/**").hasAuthority(ERole.ROLE_ADMIN.name())
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

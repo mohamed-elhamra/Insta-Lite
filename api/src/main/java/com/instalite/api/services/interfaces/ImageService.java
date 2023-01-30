@@ -11,6 +11,6 @@ public interface ImageService {
 
     Resource downloadImage(String imageId);
 
-    ImageResponse updateImage(String imageTitle, MultipartFile image, Authentication authentication);
+    ImageResponse updateImage(String publicId, String imageTitle, String visibility, MultipartFile image);
 
 }
