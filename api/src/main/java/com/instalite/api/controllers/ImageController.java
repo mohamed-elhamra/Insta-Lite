@@ -36,5 +36,12 @@ public class ImageController {
                 .body(image);
     }
 
+    @PatchMapping("/{imageId}")
+    public ResponseEntity<ImageResponse> updateImage(@PathVariable(name = "imageId") String imageId,
+                                                @RequestParam(name= "image_title") String imageTitle,
+                                                @RequestParam("visibility") String visibility,
+                                                @RequestParam("image") MultipartFile image) {
+        return ResponseEntity.accepted().body(imageService.updateImage(imageId, imageTitle, visibility, image));
+    }
 
 }

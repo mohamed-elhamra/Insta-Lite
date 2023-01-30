@@ -94,8 +94,30 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ImageResponse updateImage(String imageTitle, MultipartFile image, Authentication authentication) {
-        return null;
+    @Transactional
+    public ImageResponse updateImage(String publicId, String imageTitle, String visibility, MultipartFile image) {
+        try{
+            ImageEntity imageEntity = imageRepository.findByPublicId(publicId)
+                    .orElseThrow(() -> new RuntimeException("Image not found with this id: " + publicId));
+            if(imageRepository.findByTitle(imageTitle).isPresent() && !imageEntity.getTitle().equals(imageTitle))
+                throw new InstaLiteException("There is already an image with this title : " + imageTitle);
+
+            String imageExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
+
+            if(Constants.ALLOWED_EXTENSIONS.contains(imageExtension)){
+                imageEntity.setTitle(imageTitle);
+                imageEntity.setVisibility(EVisibility.fromValue(visibility));
+                deleteImageFromFolder(imageEntity);
+                Files.copy(image.getInputStream(), this.folder.resolve(imageEntity.getName()));
+                ImageResponse imageResponse = imageMapper.toImageResponse(imageRepository.save(imageEntity));
+                imageResponse.setUrl(this.host + imageResponse.getPublicId());
+                return imageResponse;
+            }else{
+                throw new InstaLiteException("File extension allowed (png, jpeg, jpg)");
+            }
+        }catch(IOException e){
+            throw new InstaLiteException("Could not store the image. Error: " + e.getMessage());
+        }
     }
 
     private void createFolderIfNotExits(Path folder){
@@ -112,6 +134,15 @@ public class ImageServiceImpl implements ImageService {
         String contextPath = environment.getProperty("server.servlet.context-path");
 
         this.host = "http://" + address + ":" + port + contextPath + "/images/download/";
+    }
+
+    private void deleteImageFromFolder(ImageEntity imageEntity){
+        Path imagePath = folder.resolve(imageEntity.getName());
+        try{
+            Files.delete(imagePath);
+        }catch(IOException exception){
+            throw new InstaLiteException("Could not delete the image");
+        }
     }
 
 }
