@@ -1,7 +1,8 @@
 package com.instalite.api.controllers;
 
 import com.instalite.api.dtos.requests.AuthRequest;
-import com.instalite.api.dtos.requests.UserRequest;
+import com.instalite.api.dtos.requests.UserCreationRequest;
+import com.instalite.api.dtos.requests.UserModificationRequest;
 import com.instalite.api.dtos.responses.AuthResponse;
 import com.instalite.api.dtos.responses.UserResponse;
 import com.instalite.api.services.interfaces.UserService;
@@ -26,8 +27,8 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userRequest));
+    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserCreationRequest userCreationRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userCreationRequest));
     }
 
     @PostMapping("/authenticate")
@@ -39,9 +40,9 @@ public class UserController {
 
     @PatchMapping("/{publicId}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable String publicId,
-                                                   @RequestBody @Valid UserRequest userRequest,
+                                                   @RequestBody @Valid UserModificationRequest userModificationRequest,
                                                    Authentication authentication) throws AccessDeniedException {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updateUser(publicId, userRequest, authentication));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updateUser(publicId, userModificationRequest, authentication));
     }
 
     @GetMapping("/{publicId}")

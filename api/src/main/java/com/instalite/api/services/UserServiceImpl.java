@@ -6,7 +6,8 @@ import com.instalite.api.commons.utils.Constants;
 import com.instalite.api.commons.utils.enums.ERole;
 import com.instalite.api.commons.utils.IDGenerator;
 import com.instalite.api.dtos.requests.AuthRequest;
-import com.instalite.api.dtos.requests.UserRequest;
+import com.instalite.api.dtos.requests.UserCreationRequest;
+import com.instalite.api.dtos.requests.UserModificationRequest;
 import com.instalite.api.dtos.responses.AuthResponse;
 import com.instalite.api.dtos.responses.UserResponse;
 import com.instalite.api.entities.UserEntity;
@@ -52,41 +53,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse createUser(UserRequest userRequest) {
+    public UserResponse createUser(UserCreationRequest userCreationRequest) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        Optional<UserEntity> userByEmail = userRepository.findByEmail(userRequest.getEmail());
+        Optional<UserEntity> userByEmail = userRepository.findByEmail(userCreationRequest.getEmail());
 
         userByEmail.ifPresent(user -> {
             throw new InstaLiteException("User already exits with this email: " + userByEmail.get().getEmail());
         });
 
-        UserEntity createdUser = userMapper.toUserEntity(userRequest);
+        UserEntity createdUser = userMapper.toUserEntity(userCreationRequest);
         createdUser.setPublicId(idGenerator.generateStringId());
-        createdUser.setEncryptedPassword(bCryptPasswordEncoder.encode(userRequest.getPassword()));
-        if(userRequest.getRole() == null){
-            createdUser.setRole(ERole.ROLE_USER);
-        }else{
-            createdUser.setRole(userRequest.getRole());
-        }
+        createdUser.setEncryptedPassword(bCryptPasswordEncoder.encode(userCreationRequest.getPassword()));
+        createdUser.setRole(userCreationRequest.getRole());
 
         return userMapper.toUserResponse(userRepository.save(createdUser));
     }
 
     @Override
-    public UserResponse updateUser(String publicId, UserRequest userRequest, Authentication authenticatedUser) throws AccessDeniedException {
-        boolean isEmailsEquals = userRequest.getEmail().equals(authenticatedUser.getName());
+    public UserResponse updateUser(String publicId, UserModificationRequest userModificationRequest, Authentication authenticatedUser) throws AccessDeniedException {
+        UserEntity user = userRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with this id: " + publicId));
+        boolean isEmailsEquals = user.getEmail().equals(authenticatedUser.getName());
         boolean isAdmin = authenticatedUser.getAuthorities().stream()
                 .anyMatch(authority -> authority.getAuthority().equals(ERole.ROLE_ADMIN.name()));
 
-        UserEntity user;
         if(isEmailsEquals || isAdmin){
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            user = userRepository.findByPublicId(publicId)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found with this id: " + publicId));
-            user.setFirstName(userRequest.getFirstName());
-            user.setLastName(userRequest.getLastName());
-            user.setEmail(userRequest.getEmail());
-            user.setEncryptedPassword(bCryptPasswordEncoder.encode(userRequest.getPassword()));
+            user.setFirstName(userModificationRequest.getFirstName());
+            user.setLastName(userModificationRequest.getLastName());
+            user.setEncryptedPassword(bCryptPasswordEncoder.encode(userModificationRequest.getPassword()));
+            if(isAdmin){
+                if(userModificationRequest.getRole() == null){
+                    throw new InstaLiteException("Role could not be null.");
+                }
+                user.setRole(userModificationRequest.getRole());
+            }
         }else {
             throw new AccessDeniedException("You are not allowed to update users.");
         }

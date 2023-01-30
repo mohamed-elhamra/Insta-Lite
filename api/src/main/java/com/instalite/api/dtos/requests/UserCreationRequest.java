@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRequest {
+public class UserCreationRequest {
 
     @NotBlank(message = "First name should not be empty")
     @Size(min = 5, max = 20, message = "First name should be between 5 and 20 character")
@@ -31,6 +31,7 @@ public class UserRequest {
     @Size(min = 8, max = 20, message = "Size should be between 8 and 20 character")
     private String password;
 
+    @NotNull(message = "Role should not be null")
     private ERole role;
 
 }
