@@ -63,7 +63,11 @@ public class UserServiceImpl implements UserService {
         UserEntity createdUser = userMapper.toUserEntity(userRequest);
         createdUser.setPublicId(idGenerator.generateStringId());
         createdUser.setEncryptedPassword(bCryptPasswordEncoder.encode(userRequest.getPassword()));
-        createdUser.setRole(ERole.ROLE_USER);
+        if(userRequest.getRole() == null){
+            createdUser.setRole(ERole.ROLE_USER);
+        }else{
+            createdUser.setRole(userRequest.getRole());
+        }
 
         return userMapper.toUserResponse(userRepository.save(createdUser));
     }

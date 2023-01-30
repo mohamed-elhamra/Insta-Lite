@@ -93,6 +93,11 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
+    @Override
+    public ImageResponse updateImage(String imageTitle, MultipartFile image, Authentication authentication) {
+        return null;
+    }
+
     private void createFolderIfNotExits(Path folder){
         boolean isFolderCreated = false;
         if(!folder.toFile().exists()) {

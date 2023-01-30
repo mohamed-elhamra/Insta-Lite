@@ -15,7 +15,7 @@ import java.util.Map;
 public class InstaLiteExceptionHandler {
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
-    public ResponseEntity<Object> userExceptionHandlerForDataValidationError(MethodArgumentNotValidException ex){
+    public ResponseEntity<Object> userExceptionHandlerForDataValidationError(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage()));
@@ -23,31 +23,31 @@ public class InstaLiteExceptionHandler {
     }
 
     @ExceptionHandler(value = {InstaLiteException.class})
-    public ResponseEntity<Object> instaLiteExceptionHandler(InstaLiteException ex){
+    public ResponseEntity<Object> instaLiteExceptionHandler(InstaLiteException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(buildException(ex));
     }
 
     @ExceptionHandler(value = {AccessDeniedException.class})
-    public ResponseEntity<Object> accessDeniedExceptionHandler(AccessDeniedException ex){
+    public ResponseEntity<Object> accessDeniedExceptionHandler(AccessDeniedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(buildException(ex));
     }
 
     @ExceptionHandler(value = {RuntimeException.class})
-    public ResponseEntity<Object> runTimeExceptionHandler(RuntimeException ex){
+    public ResponseEntity<Object> runTimeExceptionHandler(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(buildException(ex));
     }
 
     @ExceptionHandler(value = {Exception.class})
-    public ResponseEntity<Object> othersExceptionHandler(Exception ex){
+    public ResponseEntity<Object> othersExceptionHandler(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(buildException(ex));
     }
 
-    private ErrorMessage buildException(Exception ex){
+    private ErrorMessage buildException(Exception ex) {
         ErrorMessage errorMessage = new ErrorMessage();
         errorMessage.setTimestamp(new Date());
         errorMessage.setException(ex.getClass().getName());
         errorMessage.setMessage(ex.getMessage());
-        if(ex.getCause() != null){
+        if (ex.getCause() != null) {
             errorMessage.setCause(ex.getCause().getMessage());
         }
         return errorMessage;

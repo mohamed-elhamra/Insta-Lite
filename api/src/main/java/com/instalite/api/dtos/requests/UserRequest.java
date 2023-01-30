@@ -1,5 +1,6 @@
 package com.instalite.api.dtos.requests;
 
+import com.instalite.api.commons.utils.enums.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,5 +30,7 @@ public class UserRequest {
     @NotNull(message = "Password name should not be null")
     @Size(min = 8, max = 20, message = "Size should be between 8 and 20 character")
     private String password;
+
+    private ERole role;
 
 }
