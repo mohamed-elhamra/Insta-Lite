@@ -63,7 +63,11 @@ public class UserServiceImpl implements UserService {
         UserEntity createdUser = userMapper.toUserEntity(userRequest);
         createdUser.setPublicId(idGenerator.generateStringId());
         createdUser.setEncryptedPassword(bCryptPasswordEncoder.encode(userRequest.getPassword()));
-        createdUser.setRole(ERole.ROLE_USER);
+        if(userRequest.getRole() == null){
+            createdUser.setRole(ERole.ROLE_USER);
+        }else{
+            createdUser.setRole(userRequest.getRole());
+        }
 
         return userMapper.toUserResponse(userRepository.save(createdUser));
     }
@@ -110,11 +114,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createAdmin() {
+    public void createFirstAdmin() {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        Optional<UserEntity> user = userRepository.findByRole(ERole.ROLE_ADMIN);
+        List<UserEntity> users = userRepository.findAll();
 
-        if (user.isEmpty()) {
+        if (users.isEmpty()) {
             UserEntity admin = new UserEntity();
             admin.setPublicId(idGenerator.generateStringId());
             admin.setFirstName(Constants.ADMIN_FIRST_NAME);

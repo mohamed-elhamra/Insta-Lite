@@ -22,7 +22,7 @@ public interface UserService extends UserDetailsService {
 
     void deleteUser(String publicId);
 
-    void createAdmin();
+    void createFirstAdmin();
 
     AuthResponse authenticateUser(AuthRequest authRequest, Authentication authentication);
 

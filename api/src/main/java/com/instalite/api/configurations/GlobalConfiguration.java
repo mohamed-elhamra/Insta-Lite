@@ -16,7 +16,7 @@ public class GlobalConfiguration implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        userService.createAdmin();
+        userService.createFirstAdmin();
     }
 
 }
