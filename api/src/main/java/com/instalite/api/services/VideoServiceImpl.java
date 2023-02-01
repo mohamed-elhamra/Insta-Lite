@@ -60,19 +60,15 @@ public class VideoServiceImpl implements VideoService {
             String videoExtension = StringUtils.getFilenameExtension(video.getOriginalFilename());
 
             if(Constants.ALLOWED_VIDEO_EXTENSIONS.contains(videoExtension)){
-                System.out.println("Video extension allowed");
                 String videoPublicId = idGenerator.generateStringId();
                 String videoName = videoPublicId + "." + videoExtension;
                 VideoEntity videoEntity = new VideoEntity(null, videoPublicId, videoTitle, videoName, EVisibility.fromValue(visibility), connectedUser);
-                System.out.println("VideoEntity: " + videoEntity);
-                //save video in folder
-
+                if (!Files.exists(folder)) {
+                    Files.createDirectories(folder);
+                }
                 Files.copy(video.getInputStream(), this.folder.resolve(videoName));
-                System.out.println("Video saved");
                 VideoResponse videoResponse = videoMapper.toVideoResponse(videoRepository.save(videoEntity));
-                System.out.println("Video saved in database");
                 videoResponse.setUrl(this.host + videoResponse.getPublicId());
-                System.out.println("Video url setted");
                 return videoResponse;
             }else{
                 throw new InstaLiteException("File extension allowed (png, jpeg, jpg)");
