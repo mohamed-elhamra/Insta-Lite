@@ -40,4 +40,8 @@ public class UserEntity {
     @ToString.Exclude
     private Set<ImageEntity> image;
 
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    private Set<VideoEntity> video;
+
 }

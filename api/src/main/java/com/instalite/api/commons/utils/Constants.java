@@ -15,5 +15,6 @@ public class Constants {
     public static final String ADMIN_EMAIL = "admin@gmail.com";
     public static final String ADMIN_PASSWORD = "admin123456";
     public static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("JPEG", "PNG", "JPG", "jpeg", "png", "jpg");
+    public static final List<String> ALLOWED_VIDEO_EXTENSIONS = Arrays.asList("mp4", "MP4", "avi", "AVI", "mov", "MOV", "wmv", "WMV", "flv", "FLV", "mkv", "MKV", "3gp", "3GP", "webm", "WEBM", "ogg", "OGG", "m4v", "M4V");
 
 }
