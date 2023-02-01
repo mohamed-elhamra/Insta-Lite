@@ -28,7 +28,9 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -68,7 +70,7 @@ public class ImageServiceImpl implements ImageService {
             if(Constants.ALLOWED_EXTENSIONS.contains(imageExtension)){
                 String imagePublicId = idGenerator.generateStringId();
                 String imageName = imagePublicId + "." + imageExtension;
-                ImageEntity imageEntity = new ImageEntity(null, imagePublicId, imageTitle, imageName, EVisibility.fromValue(visibility), connectedUser);
+                ImageEntity imageEntity = new ImageEntity(null, imagePublicId, imageTitle, imageName, EVisibility.fromValue(visibility), new Date(), connectedUser);
                 if (!Files.exists(folder)) {
                     Files.createDirectories(folder);
                 }

@@ -4,6 +4,7 @@ import com.instalite.api.commons.utils.enums.EVisibility;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -29,6 +30,9 @@ public class ImageEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EVisibility visibility;
+
+    @Column(nullable = false)
+    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

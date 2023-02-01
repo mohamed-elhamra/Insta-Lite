@@ -14,5 +14,8 @@ public class ImageResponse {
     private String title;
     private EVisibility visibility;
     private String url;
+    private String userPublicId;
+    private String userFirstName;
+    private String userLastName;
 
 }
