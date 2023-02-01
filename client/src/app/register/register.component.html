@@ -1,0 +1,120 @@
+<div class="col-md-12">
+    <div class="card card-container">
+      <img
+        id="profile-img"
+        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+        class="profile-img-card"
+      />
+      <form
+        *ngIf="!isSuccessful"
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+      >
+        <div class="form-group">
+          <label for="firstname">Prénom</label>
+          <input
+            type="text"
+            class="form-control"
+            name="firstname"
+            [(ngModel)]="form.firstname"
+            required
+            minlength="5"
+            maxlength="20"
+            #firstname="ngModel"
+          />
+          <div class="alert-danger" *ngIf="firstname.errors && f.submitted">
+            <div *ngIf="firstname.errors.required">Le prénom est obligatoire.</div>
+            <div *ngIf="firstname.errors.minlength">
+              Le prénom doit avoir au minimum 5 caractères.
+            </div>
+            <div *ngIf="firstname.errors.maxlength">
+              Le prénom doit contenir au maximum 20 caractères.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+            <label for="lastname">nom</label>
+            <input
+              type="text"
+              class="form-control"
+              name="lastname"
+              [(ngModel)]="form.lastname"
+              required
+              minlength="5"
+              maxlength="20"
+              #lastname="ngModel"
+            />
+            <div class="alert-danger" *ngIf="lastname.errors && f.submitted">
+              <div *ngIf="lastname.errors.required">Le nom est obligatoire.</div>
+              <div *ngIf="lastname.errors.minlength">
+                Le nom doit avoir au minimum 5 caractères.
+              </div>
+              <div *ngIf="lastname.errors.maxlength">
+                Le nom doit contenir au maximum 20 caractères.
+              </div>
+            </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            [(ngModel)]="form.email"
+            required
+            email
+            #email="ngModel"
+          />
+          <div class="alert-danger" *ngIf="email.errors && f.submitted">
+            <div *ngIf="email.errors.required">L'adresse email est obligatoire.</div>
+            <div *ngIf="email.errors.email">
+              L'adresse email doit être valide.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Le mot de passe</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            [(ngModel)]="form.password"
+            required
+            minlength="6"
+            #password="ngModel"
+          />
+          <div class="alert-danger" *ngIf="password.errors && f.submitted">
+            <div *ngIf="password.errors.required">Le mot de passe est obligatoire.</div>
+            <div *ngIf="password.errors.minlength">
+              Le mot de passe doit avoir au minimum 8 caractères.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+            <label>Rôle</label>
+            <div class="form-control">
+              <label class="radio-inline">
+                <input type="radio" name="role" value="1" ngModel>
+                Utilisateur
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="role" value="0" ngModel>
+                Administrateur
+              </label>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block">Créer l'utilisateur</button>
+        </div>
+  
+        <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+          La création a échoué !<br />{{ errorMessage }}
+        </div>
+      </form>
+  
+      <div class="alert alert-success" *ngIf="isSuccessful">
+        Le compte est créé avec succès.
+      </div>
+    </div>
+  </div>
