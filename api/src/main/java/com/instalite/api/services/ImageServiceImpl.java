@@ -63,6 +63,9 @@ public class ImageServiceImpl implements ImageService {
                 String imagePublicId = idGenerator.generateStringId();
                 String imageName = imagePublicId + "." + imageExtension;
                 ImageEntity imageEntity = new ImageEntity(null, imagePublicId, imageTitle, imageName, EVisibility.fromValue(visibility), connectedUser);
+                if (!Files.exists(folder)) {
+                    Files.createDirectories(folder);
+                }
                 Files.copy(image.getInputStream(), this.folder.resolve(imageName));
 
                 ImageResponse imageResponse = imageMapper.toImageResponse(imageRepository.save(imageEntity));
