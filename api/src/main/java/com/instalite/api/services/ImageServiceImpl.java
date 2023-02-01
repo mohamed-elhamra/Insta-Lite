@@ -5,6 +5,7 @@ import com.instalite.api.commons.mappers.ImageMapper;
 import com.instalite.api.commons.utils.Constants;
 import com.instalite.api.commons.utils.IDGenerator;
 import com.instalite.api.commons.utils.enums.EVisibility;
+import com.instalite.api.controllers.ImageController;
 import com.instalite.api.dtos.responses.ImageResponse;
 import com.instalite.api.entities.ImageEntity;
 import com.instalite.api.entities.UserEntity;
@@ -20,12 +21,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ImageServiceImpl implements ImageService {
@@ -138,6 +144,29 @@ public class ImageServiceImpl implements ImageService {
         }else{
             throw new InstaLiteException("You are not allowed to update this image.");
         }
+    }
+
+    @Override
+    public List<ImageResponse> listImages(Authentication authentication) {
+        List<ImageEntity> images = imageRepository.findAll();
+        if(authentication != null && authentication.isAuthenticated()){
+            return images.stream()
+                    .filter(image -> {
+                        boolean isImagePublic = image.getVisibility().getValue().equals(EVisibility.PUBLIC.getValue());
+                        boolean isImagePrivate = image.getVisibility().getValue().equals(EVisibility.PRIVATE.getValue());
+                        return isImagePublic || isImagePrivate || image.getUser().getEmail().equals(authentication.getName());
+                    })
+                    .map(imageMapper::toImageResponse)
+                    .peek(imageResponse -> imageResponse.setUrl(this.host + imageResponse.getPublicId()))
+                    .collect(Collectors.toList());
+        }else if(authentication == null){
+            return images.stream()
+                    .filter(image -> image.getVisibility().getValue().equals(EVisibility.PUBLIC.getValue()))
+                    .map(imageMapper::toImageResponse)
+                    .peek(imageResponse -> imageResponse.setUrl(this.host + imageResponse.getPublicId()))
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
 
     private void createFolderIfNotExits(Path folder){

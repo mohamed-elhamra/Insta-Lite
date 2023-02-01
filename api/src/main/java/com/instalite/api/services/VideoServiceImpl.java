@@ -71,7 +71,7 @@ public class VideoServiceImpl implements VideoService {
                 videoResponse.setUrl(this.host + videoResponse.getPublicId());
                 return videoResponse;
             }else{
-                throw new InstaLiteException("File extension allowed (png, jpeg, jpg)");
+                throw new InstaLiteException("Invalid extension");
             }
         }catch(IOException e){
             throw new InstaLiteException("Could not store the video. Error: " + e.getMessage());
