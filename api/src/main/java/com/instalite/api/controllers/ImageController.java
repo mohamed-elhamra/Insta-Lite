@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/images")
 @AllArgsConstructor
@@ -48,6 +50,11 @@ public class ImageController {
     public ResponseEntity<String> deleteImage(@PathVariable(name = "imageId") String imageId, Authentication authentication){
         imageService.deleteImage(imageId, authentication);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ImageResponse>> listImages(Authentication authentication){
+        return ResponseEntity.ok(imageService.listImages(authentication));
     }
 
 }
