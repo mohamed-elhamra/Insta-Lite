@@ -32,7 +32,7 @@ public class ImageEntity {
     private EVisibility visibility;
 
     @Column(nullable = false)
-    private Date date;
+    private Date creationDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
