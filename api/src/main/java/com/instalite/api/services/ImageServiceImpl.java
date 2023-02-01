@@ -95,28 +95,45 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
-    public ImageResponse updateImage(String publicId, String imageTitle, String visibility, MultipartFile image) {
+    public ImageResponse updateImage(String publicId, String imageTitle, String visibility, MultipartFile image, Authentication authentication) {
         try{
             ImageEntity imageEntity = imageRepository.findByPublicId(publicId)
                     .orElseThrow(() -> new RuntimeException("Image not found with this id: " + publicId));
-            if(imageRepository.findByTitle(imageTitle).isPresent() && !imageEntity.getTitle().equals(imageTitle))
-                throw new InstaLiteException("There is already an image with this title : " + imageTitle);
+            if(imageEntity.getUser().getEmail().equals(authentication.getName())){
+                if(imageRepository.findByTitle(imageTitle).isPresent() && !imageEntity.getTitle().equals(imageTitle))
+                    throw new InstaLiteException("There is already an image with this title : " + imageTitle);
 
-            String imageExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
+                String imageExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
 
-            if(Constants.ALLOWED_EXTENSIONS.contains(imageExtension)){
-                imageEntity.setTitle(imageTitle);
-                imageEntity.setVisibility(EVisibility.fromValue(visibility));
-                deleteImageFromFolder(imageEntity);
-                Files.copy(image.getInputStream(), this.folder.resolve(imageEntity.getName()));
-                ImageResponse imageResponse = imageMapper.toImageResponse(imageRepository.save(imageEntity));
-                imageResponse.setUrl(this.host + imageResponse.getPublicId());
-                return imageResponse;
+                if(Constants.ALLOWED_EXTENSIONS.contains(imageExtension)){
+                    imageEntity.setTitle(imageTitle);
+                    imageEntity.setVisibility(EVisibility.fromValue(visibility));
+                    deleteImageFromFolder(imageEntity);
+                    Files.copy(image.getInputStream(), this.folder.resolve(imageEntity.getName()));
+                    ImageResponse imageResponse = imageMapper.toImageResponse(imageRepository.save(imageEntity));
+                    imageResponse.setUrl(this.host + imageResponse.getPublicId());
+                    return imageResponse;
+                }else{
+                    throw new InstaLiteException("File extension allowed (png, jpeg, jpg)");
+                }
             }else{
-                throw new InstaLiteException("File extension allowed (png, jpeg, jpg)");
+                throw new InstaLiteException("You are not allowed to update this image.");
             }
         }catch(IOException e){
             throw new InstaLiteException("Could not store the image. Error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteImage(String publicId, Authentication authentication) {
+        ImageEntity imageEntity = imageRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new RuntimeException("Image not found with this id: " + publicId));
+        if(imageEntity.getUser().getEmail().equals(authentication.getName())){
+            deleteImageFromFolder(imageEntity);
+            imageRepository.delete(imageEntity);
+        }else{
+            throw new InstaLiteException("You are not allowed to update this image.");
         }
     }
 

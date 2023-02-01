@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.AccessDeniedException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -82,14 +83,14 @@ public class UserServiceImpl implements UserService {
             user.setFirstName(userModificationRequest.getFirstName());
             user.setLastName(userModificationRequest.getLastName());
             user.setEncryptedPassword(bCryptPasswordEncoder.encode(userModificationRequest.getPassword()));
-            if(isAdmin){
-                if(userModificationRequest.getRole() == null){
+            if (isAdmin) {
+                if (userModificationRequest.getRole() == null) {
                     throw new InstaLiteException("Role could not be null.");
                 }
                 user.setRole(userModificationRequest.getRole());
             }
-        }else {
-            throw new AccessDeniedException("You are not allowed to update users.");
+        }else{
+            throw new AccessDeniedException("You are not allowed to update this user.");
         }
 
         return userMapper.toUserResponse(userRepository.save(user));
