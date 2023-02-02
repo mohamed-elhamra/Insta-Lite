@@ -144,6 +144,7 @@ public class UserServiceImpl implements UserService {
             return AuthResponse.builder()
                     .publicId(user.getPublicId())
                     .email(user.getEmail())
+                    .role(user.getRole())
                     .jwt(jwt)
                     .build();
         } else {

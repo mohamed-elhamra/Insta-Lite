@@ -15,7 +15,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/instalite_db
     username: root
-    password:
+    password: root
     driver-class-name: com.mysql.jdbc.Driver
 
   servlet:

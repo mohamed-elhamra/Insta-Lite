@@ -9,6 +9,7 @@ import { RegisterComponent } from './register/register.component';
 
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
