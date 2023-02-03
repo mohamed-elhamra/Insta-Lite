@@ -10,12 +10,16 @@ import { RegisterComponent } from './register/register.component';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
+import { CreateImageComponent } from './images/create-image/create-image.component';
+import { UpdateImageComponent } from './images/update-image/update-image.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    CreateImageComponent,
+    UpdateImageComponent
   ],
   imports: [
     BrowserModule,
