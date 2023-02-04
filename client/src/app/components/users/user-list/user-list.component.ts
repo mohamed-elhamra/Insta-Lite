@@ -3,6 +3,7 @@ import { UserService } from 'src/app/_services/user.service';
 import { Router } from '@angular/router';
 import { Observable } from "rxjs";
 import { User } from 'src/app/models/User';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 
 
@@ -14,10 +15,24 @@ import { User } from 'src/app/models/User';
 export class UserListComponent implements OnInit{
 
   users: Observable<User[]> | undefined;
+  isLoggedIn = false;
+  showAdminBoard = false;
+  showUserBoard = false;
+  private role:string;
 
-  constructor(private userService: UserService, private router: Router){}
+  constructor(private userService: UserService, private router: Router, private tokenStorageService: TokenStorageService ){}
 
   ngOnInit(): void {
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.role
+       = user.role;
+
+      this.showAdminBoard = this.role.includes('ROLE_ADMIN');
+      this.showUserBoard = this.role.includes('ROLE_USER');
+    }
     this.reloadData();
   }
 

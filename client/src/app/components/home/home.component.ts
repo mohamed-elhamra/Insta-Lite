@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ImageService } from 'src/app/_services/image.service';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { VideoService } from 'src/app/_services/video.service';
 
 @Component({
@@ -9,15 +10,29 @@ import { VideoService } from 'src/app/_services/video.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
+  isLoggedIn = false;
+  showAdminBoard = false;
+  showUserBoard = false;
+  private role:string;
   posts: any[] = [];
   weekend: string;
 
-  constructor(private imageService: ImageService, private videoService: VideoService, private http: HttpClient) { }
+  constructor(private imageService: ImageService, private videoService: VideoService, private http: HttpClient,
+    private tokenStorageService: TokenStorageService) { }
 
 
 
   ngOnInit(): void {
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.role
+       = user.role;
+
+      this.showAdminBoard = this.role.includes('ROLE_ADMIN');
+      this.showUserBoard = this.role.includes('ROLE_USER');
+    }
     this.http.get('https://cors-anywhere.herokuapp.com/https://estcequecestbientotleweekend.fr/')
   .subscribe(data => {
   },

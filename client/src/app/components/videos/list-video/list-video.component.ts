@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import * as JSZip from 'jszip';
 import * as FileSaver from 'file-saver';
 import { HttpClient } from '@angular/common/http';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 
 @Component({
@@ -13,12 +14,25 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./list-video.component.css']
 })
 export class ListvideoComponent implements OnInit {
-
+  isLoggedIn = false;
+  showAdminBoard = false;
+  showUserBoard = false;
+  private role:string;
   videos: Video[];
 
-  constructor(private videoService: VideoService, private router: Router, private http: HttpClient) { }
+  constructor(private videoService: VideoService, private router: Router, private http: HttpClient, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit(): void {
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.role
+       = user.role;
+
+      this.showAdminBoard = this.role.includes('ROLE_ADMIN');
+      this.showUserBoard = this.role.includes('ROLE_USER');
+    }
     this.listvideos();
   }
 

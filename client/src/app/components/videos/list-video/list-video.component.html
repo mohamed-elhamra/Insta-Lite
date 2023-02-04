@@ -1,4 +1,4 @@
-<button class="add-button" (click)="createvideo()">Create</button>
+<button *ngIf="showAdminBoard" class="add-button" (click)="createvideo()">Create</button>
 <button class="download-all-button" (click)="downlaoadAllvideos()">Download all videos</button>
 <table>
     <thead>
@@ -16,8 +16,8 @@
             <td>{{video.creationDate | date:'dd/MM/yyyy'}}</td>
             <td>
                 <button class="download-button" (click)="downloadvideo(video.url)">Download</button>
-                <button class="update-button" (click)="updatevideo(video.publicId, video.title, video.visibility)">Update</button>
-                <button class="delete-button" (click)="deletevideo(video.publicId)">Delete</button>
+                <button *ngIf="showAdminBoard" class="update-button" (click)="updatevideo(video.publicId, video.title, video.visibility)">Update</button>
+                <button *ngIf="showAdminBoard" class="delete-button" (click)="deletevideo(video.publicId)">Delete</button>
             </td>
         </tr>
     </tbody>

@@ -1,4 +1,4 @@
-<button class="add-button" (click)="createImage()">Create</button>
+<button class="add-button" (click)="createImage()" *ngIf="showAdminBoard">Create</button>
 <button class="download-all-button" (click)="downlaoadAllImages()">Download all images</button>
 <table>
     <thead>
@@ -16,8 +16,8 @@
             <td>{{image.creationDate | date:'dd/MM/yyyy'}}</td>
             <td>
                 <button class="download-button" (click)="downloadImage(image.url)">Download</button>
-                <button class="update-button" (click)="updateImage(image.publicId, image.title, image.visibility)">Update</button>
-                <button class="delete-button" (click)="deleteImage(image.publicId)">Delete</button>
+                <button *ngIf="showAdminBoard" class="update-button" (click)="updateImage(image.publicId, image.title, image.visibility)">Update</button>
+                <button *ngIf="showAdminBoard" class="delete-button" (click)="deleteImage(image.publicId)">Delete</button>
             </td>
         </tr>
     </tbody>

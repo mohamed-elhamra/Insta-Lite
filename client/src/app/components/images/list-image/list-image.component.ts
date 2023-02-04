@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import * as JSZip from 'jszip';
 import * as FileSaver from 'file-saver';
 import { HttpClient } from '@angular/common/http';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 
 @Component({
@@ -13,12 +14,25 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./list-image.component.css']
 })
 export class ListImageComponent implements OnInit {
-
+  isLoggedIn = false;
+  showAdminBoard = false;
+  showUserBoard = false;
+  private role:string;
   images: Image[];
 
-  constructor(private imageService: ImageService, private router: Router, private http: HttpClient) { }
+  constructor(private imageService: ImageService, private router: Router, private http: HttpClient, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit(): void {
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.role
+       = user.role;
+
+      this.showAdminBoard = this.role.includes('ROLE_ADMIN');
+      this.showUserBoard = this.role.includes('ROLE_USER');
+    }
     this.listImages();
   }
 
