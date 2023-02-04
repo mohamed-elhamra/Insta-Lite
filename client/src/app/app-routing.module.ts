@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserUpdateComponent } from './user-update/user-update.component';
 import { HomeComponent } from './home/home.component';
+import { MeteoComponent } from './meteo/meteo.component';
 
 const routes: Routes = [
   { path: 'create-user', component: RegisterComponent },
@@ -12,7 +13,8 @@ const routes: Routes = [
   { path: 'users', component:UserListComponent},
   {path: 'update-user/:publicId', component: UserUpdateComponent},
   {path: 'home', component:HomeComponent},
-  {path: '', pathMatch: 'full', redirectTo: 'home'}
+  {path: '', pathMatch: 'full', redirectTo: 'home'},
+  {path: 'meteo', component: MeteoComponent }
 ];
 
 @NgModule({

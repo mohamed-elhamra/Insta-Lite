@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserUpdateComponent } from './user-update/user-update.component';
 import { HomeComponent } from './home/home.component';
+import { MeteoComponent } from './meteo/meteo.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { HomeComponent } from './home/home.component';
     RegisterComponent,
     UserListComponent,
     UserUpdateComponent,
-    HomeComponent
+    HomeComponent,
+    MeteoComponent
   ],
   imports: [
     BrowserModule,
