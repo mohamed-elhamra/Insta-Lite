@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { User } from '../models/User';
 import { TokenStorageService } from './token-storage.service';
 
 
@@ -26,8 +27,8 @@ export class UserService {
     return this.http.delete(`${AUTH_API}${publicId}`, { responseType: 'text' });
   }
 
-  updateUser(publicId: string, value: any): Observable<Object> {
-    return this.http.patch(`${AUTH_API}${publicId}`, JSON.stringify(value, this.tokenStorage.getUser()));
+  updateUser(publicId: string, value: User): Observable<Object> {
+    return this.http.patch(`${AUTH_API}${publicId}`, value, this.tokenStorage.getUser());
   }
 
   getUser(publicId: string): Observable<any> {

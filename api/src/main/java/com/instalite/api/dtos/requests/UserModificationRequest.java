@@ -22,10 +22,6 @@ public class UserModificationRequest {
     @Size(min = 5, max = 20, message = "Last name should be between 5 and 20 character")
     private String lastName;
 
-    @NotNull(message = "Password name should not be null")
-    @Size(min = 8, max = 20, message = "Size should be between 8 and 20 character")
-    private String password;
-
     private ERole role;
 
 }

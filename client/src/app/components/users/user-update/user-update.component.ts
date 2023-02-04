@@ -39,6 +39,8 @@ export class UserUpdateComponent  implements OnInit{
   }
 
   updateUser() {
+    console.log(this.user);
+    console.log(this.publicId);
     this.userService.updateUser(this.publicId ?? '', this.user)
       .subscribe(data => {
         console.log(data);

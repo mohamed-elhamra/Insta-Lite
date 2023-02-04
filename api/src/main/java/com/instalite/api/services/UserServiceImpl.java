@@ -79,10 +79,8 @@ public class UserServiceImpl implements UserService {
                 .anyMatch(authority -> authority.getAuthority().equals(ERole.ROLE_ADMIN.name()));
 
         if(isEmailsEquals || isAdmin){
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             user.setFirstName(userModificationRequest.getFirstName());
             user.setLastName(userModificationRequest.getLastName());
-            user.setEncryptedPassword(bCryptPasswordEncoder.encode(userModificationRequest.getPassword()));
             if (isAdmin) {
                 if (userModificationRequest.getRole() == null) {
                     throw new InstaLiteException("Role could not be null.");
