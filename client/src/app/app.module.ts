@@ -20,6 +20,7 @@ import { ListImageComponent } from './components/images/list-image/list-image.co
 import { CreatevideoComponent } from './components/videos/create-video/create-video.component';
 import { UpdatevideoComponent } from './components/videos/update-video/update-video.component';
 import { ListvideoComponent } from './components/videos/list-video/list-video.component';
+import { NewsComponent } from './components/news/news.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ListvideoComponent } from './components/videos/list-video/list-video.co
     ListImageComponent,
     CreatevideoComponent,
     UpdatevideoComponent,
-    ListvideoComponent
+    ListvideoComponent,
+    NewsComponent
   ],
   imports: [
     BrowserModule,

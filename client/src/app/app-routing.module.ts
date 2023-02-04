@@ -12,6 +12,7 @@ import { UpdateImageComponent } from './components/images/update-image/update-im
 import { CreatevideoComponent } from './components/videos/create-video/create-video.component';
 import { ListvideoComponent } from './components/videos/list-video/list-video.component';
 import { UpdatevideoComponent } from './components/videos/update-video/update-video.component';
+import { NewsComponent } from './components/news/news.component';
 
 const routes: Routes = [
   { path: 'create-user', component: RegisterComponent, pathMatch: 'full' },
@@ -27,7 +28,8 @@ const routes: Routes = [
   {path: 'update-user/:publicId', component: UserUpdateComponent, pathMatch: 'full'},
   {path: 'home', component:HomeComponent, pathMatch: 'full'},
   {path: '', redirectTo: 'home', pathMatch: 'full'},
-  {path: 'meteo', component: MeteoComponent, pathMatch: 'full' }
+  {path: 'meteo', component: MeteoComponent, pathMatch: 'full' },
+  {path: 'news', component: NewsComponent, pathMatch: 'full'}
 ];
 
 @NgModule({

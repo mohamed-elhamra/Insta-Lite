@@ -1,8 +1,29 @@
-<div class="d-flex justify-content-center align-items-center" id="main">
+<!-- <div class="d-flex justify-content-center align-items-center" id="main">
     <h1 class="mr-3 pr-3 align-top border-right inline-block align-content-center">Projet Insta-Lite</h1>
     <div class="inline-block align-middle">
     	<h2 class="font-weight-normal lead" id="desc" style="text-align: justify;">Cette application à pour but de simuler l'application instagram, qui est 
             une version légère de ce dernier, cette application permet de gérer les profiles, les images et les vidéos.
                  </h2>
     </div>
-</div>
+</div> -->
+<h1>{{weekend}}</h1>
+  <div class="instagram-clone">
+    <div class="post-container" *ngFor="let post of posts">
+      <div class="post-header">
+        <div class="post-user-info">
+          <div class="post-user-name">{{post.userFirstName}} {{post.userLastName}}</div>
+          <div class="post-creation-date">{{post.creationDate | date}}</div>
+        </div>
+      </div>
+      <div class="post-media">
+        <img *ngIf="post.type === 'image'" [src]="post.url"/>
+        <video *ngIf="post.type === 'video'" [src]="post.url" controls></video>
+      </div>
+      <div class="post-actions">
+        <div class="post-like"></div>
+        <div class="post-comment"></div>
+        <div class="post-share"></div>
+      </div>
+    </div>
+
+  </div>

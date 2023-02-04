@@ -1,0 +1,7 @@
+<div class="news-container">
+<div *ngFor="let news of newsArray">
+    <h3>{{news.title}}</h3>
+    <p>{{news.abstract}}</p>
+    <img [src]="news.image"/>
+  </div>
+</div>
