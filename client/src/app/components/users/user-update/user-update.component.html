@@ -1,0 +1,35 @@
+<h3>Modifier un utilisateur</h3>
+<div style="width: 400px;">
+  <form (ngSubmit)="onSubmit()"  #f="ngForm">
+    <div class="form-group">
+      <label for="name">Prénom</label>
+      <input type="text" class="form-control" id="firstName" required [(ngModel)]="user.firstName" name="firstName">
+    </div>
+
+    <div class="form-group">
+      <label for="name">Nom</label>
+      <input type="text" class="form-control" id="lastName" required [(ngModel)]="user.lastName" name="lastName">
+    </div>
+
+    <div class="form-group">
+      <label for="name">Email </label>
+      <input type="text" class="form-control" id="emailId" required [(ngModel)]="user.email" name="emailId">
+    </div>
+
+      <div class="form-group">
+        <label>Rôle</label>
+        <div class="form-control">
+          <label class="radio-inline">
+            <input type="radio" name="role" value="ROLE_USER" [(ngModel)]="user.role">
+            Utilisateur
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="role" value="ROLE_ADMIN" [(ngModel)]="user.role" id="adminRadio" >
+            Administrateur
+          </label>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+</div>

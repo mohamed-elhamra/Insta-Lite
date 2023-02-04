@@ -1,3 +1,73 @@
-<div class = "container">
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+  <a href="#" class="navbar-brand">Insta-lite</a>
+  <ul class="navbar-nav mr-auto" routerLinkActive="active">
+    <li class="nav-item">
+      <a href="/home" class="nav-link" routerLink="home">Accueil </a>
+    </li>
+    <li class="nav-item">
+      <a href="/meteo" class="nav-link" routerLink="meteo">Météo </a>
+    </li>
+    <li class="nav-item dropdown" *ngIf="showAdminBoard">
+      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Utilisateurs</a>
+      <div class="dropdown-menu">
+         <a href="/users" class="dropdown-item" routerLink="users">Lister les ulitisateurs</a>
+         <a href="/create-user" class="dropdown-item" routerLink="create-user">Ajouter un utilisateur</a>
+      </div>
+    </li>
+    <!-- <li class="nav-item dropdown" *ngIf="showModeratorBoard || showAdminBoard">
+      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Anomalies</a>
+      <div class="dropdown-menu">
+         <a href="/list-anomaly" class="dropdown-item" routerLink="list-anomaly">Lister les anomalies</a>
+         <a href="/create-anomaly" class="dropdown-item" routerLink="create-anomaly">Ajouter une anomalie</a>
+      </div>
+    </li>
+    <li class="nav-item dropdown" *ngIf="showModeratorBoard || showAdminBoard">
+      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Locaux</a>
+      <div class="dropdown-menu">
+         <a href="/list-local" class="dropdown-item" routerLink="list-local">Lister les locaux</a>
+         <a href="/create-local" class="dropdown-item" routerLink="create-local">Ajouter un local</a>
+      </div>
+    </li>
+    <li class="nav-item dropdown" *ngIf="showAdminBoard">
+      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Responsables</a>
+      <div class="dropdown-menu">
+         <a href="/list-responsible" class="dropdown-item" routerLink="list-responsible">Lister les responsables</a>
+         <a href="/create-responsible" class="dropdown-item" routerLink="create-responsible">Ajouter un responsable</a>
+      </div>
+    </li>
+    <li class="nav-item dropdown" >
+      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Ressources</a>
+      <div class="dropdown-menu">
+         <a href="/list-ressource" class="dropdown-item" routerLink="list-ressource">Lister les ressources</a>
+         <a *ngIf="showModeratorBoard || showAdminBoard" href="/create-ressource" class="dropdown-item" routerLink="create-ressource">Ajouter une ressource</a>
+      </div>
+    </li>
+    <li class="nav-item dropdown" *ngIf="showModeratorBoard">
+      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Défaillances</a>
+      <div class="dropdown-menu">
+         <a href="/list-failure" class="dropdown-item" routerLink="list-failure">Lister les défaillances</a>
+      </div>
+    </li> -->
+    
+  </ul>
+
+  <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
+    <li class="nav-item">
+      <a href="/login" class="nav-link" routerLink="login">Se connecter</a>
+    </li>
+  </ul>
+
+  <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
+    <li class="nav-item">
+      <a href class="nav-link" (click)="logout()">Déconnexion</a>
+    </li>
+  </ul>
+</nav>
+<div class="container">
+  <br>
+  <h2 style="text-align: center;">Insta-lite</h2>
+  <hr>  
+  <div class="card">
   <router-outlet></router-outlet>
+  </div>
 </div>

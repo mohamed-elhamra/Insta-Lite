@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from 'src/app/components/register/register.component';
+import { LoginComponent } from 'src/app/components/login/login.component';
+import { UserListComponent } from 'src/app/components/users/user-list/user-list.component';
+import { UserUpdateComponent } from 'src/app/components/users/user-update/user-update.component';
+import { HomeComponent } from 'src/app/components/home/home.component';
+import { MeteoComponent } from 'src/app/components/meteo/meteo.component';
 import { CreateImageComponent } from './components/images/create-image/create-image.component';
 import { ListImageComponent } from './components/images/list-image/list-image.component';
 import { UpdateImageComponent } from './components/images/update-image/update-image.component';
@@ -18,7 +22,12 @@ const routes: Routes = [
   { path: 'image/update', component: UpdateImageComponent, pathMatch: 'full' },
   { path: 'video/upload', component: CreatevideoComponent, pathMatch: 'full' },
   { path: 'video', component: ListvideoComponent, pathMatch: 'full' },
-  { path: 'video/update', component: UpdatevideoComponent, pathMatch: 'full'}
+  { path: 'video/update', component: UpdatevideoComponent, pathMatch: 'full'},
+  { path: 'users', component:UserListComponent, pathMatch: 'full'},
+  {path: 'update-user/:publicId', component: UserUpdateComponent, pathMatch: 'full'},
+  {path: 'home', component:HomeComponent, pathMatch: 'full'},
+  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: 'meteo', component: MeteoComponent, pathMatch: 'full' }
 ];
 
 @NgModule({

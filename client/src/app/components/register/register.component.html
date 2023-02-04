@@ -98,11 +98,11 @@
             <label>Rôle</label>
             <div class="form-control">
               <label class="radio-inline">
-                <input type="radio" name="role" value="1" ngModel>
+                <input type="radio" name="role" value="ROLE_USER" [(ngModel)]="form.role">
                 Utilisateur
               </label>
               <label class="radio-inline">
-                <input type="radio" name="role" value="0" ngModel id="adminRadio">
+                <input type="radio" name="role" value="ROLE_ADMIN" [(ngModel)]="form.role" id="adminRadio" >
                 Administrateur
               </label>
             </div>
