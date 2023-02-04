@@ -35,7 +35,9 @@ public class VideoController {
         Resource video = videoService.downloadVideo(videoId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + video.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_TYPE, "video/mp4")
                 .body(video);
+
     }
 
     @PatchMapping("/{videoId}")
