@@ -6,6 +6,9 @@ import com.instalite.api.commons.utils.Constants;
 import com.instalite.api.commons.utils.IDGenerator;
 import com.instalite.api.commons.utils.enums.EVisibility;
 import com.instalite.api.dtos.responses.VideoResponse;
+import com.instalite.api.dtos.responses.VideoResponse;
+import com.instalite.api.entities.VideoEntity;
+import com.instalite.api.entities.VideoEntity;
 import com.instalite.api.entities.VideoEntity;
 import com.instalite.api.entities.UserEntity;
 import com.instalite.api.repositories.VideoRepository;
@@ -27,6 +30,10 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VideoServiceImpl implements VideoService {
@@ -62,7 +69,7 @@ public class VideoServiceImpl implements VideoService {
             if(Constants.ALLOWED_VIDEO_EXTENSIONS.contains(videoExtension)){
                 String videoPublicId = idGenerator.generateStringId();
                 String videoName = videoPublicId + "." + videoExtension;
-                VideoEntity videoEntity = new VideoEntity(null, videoPublicId, videoTitle, videoName, EVisibility.fromValue(visibility), connectedUser);
+                VideoEntity videoEntity = new VideoEntity(null, videoPublicId, videoTitle, videoName, EVisibility.fromValue(visibility), new Date(), connectedUser);
                 if (!Files.exists(folder)) {
                     Files.createDirectories(folder);
                 }
@@ -104,23 +111,65 @@ public class VideoServiceImpl implements VideoService {
             if(videoRepository.findByTitle(videoTitle).isPresent() && !videoEntity.getTitle().equals(videoTitle))
                 throw new InstaLiteException("There is already an video with this title : " + videoTitle);
 
-            String videoExtension = StringUtils.getFilenameExtension(video.getOriginalFilename());
-
-            if(Constants.ALLOWED_VIDEO_EXTENSIONS.contains(videoExtension)){
+            if(videoTitle != null && !videoTitle.isEmpty() && !videoTitle.isBlank())
                 videoEntity.setTitle(videoTitle);
+            if(visibility != null && !visibility.isEmpty() && !visibility.isBlank())
                 videoEntity.setVisibility(EVisibility.fromValue(visibility));
-                deleteVideoFromFolder(videoEntity);
-                Files.copy(video.getInputStream(), this.folder.resolve(videoEntity.getName()));
-                VideoResponse videoResponse = videoMapper.toVideoResponse(videoRepository.save(videoEntity));
-                videoResponse.setUrl(this.host + videoResponse.getPublicId());
-                return videoResponse;
-            }else{
-                throw new InstaLiteException("File extension allowed (png, jpeg, jpg)");
+
+            if (video != null && !video.isEmpty() && !video.getOriginalFilename().isEmpty() && !video.getOriginalFilename().isBlank()) {
+                String videoExtension = StringUtils.getFilenameExtension(video.getOriginalFilename());
+
+                if (Constants.ALLOWED_VIDEO_EXTENSIONS.contains(videoExtension)) {
+                    deleteVideoFromFolder(videoEntity);
+                    Files.copy(video.getInputStream(), this.folder.resolve(videoEntity.getName()));
+
+                } else {
+                    throw new InstaLiteException("File extension allowed (png, jpeg, jpg)");
+                }
             }
+            VideoResponse videoResponse = videoMapper.toVideoResponse(videoRepository.save(videoEntity));
+            videoResponse.setUrl(this.host + videoResponse.getPublicId());
+            return videoResponse;
         }catch(IOException e){
             throw new InstaLiteException("Could not store the video. Error: " + e.getMessage());
         }
     }
+
+    @Override
+    public List<VideoResponse> listVideos(Authentication authentication) {
+        List<VideoEntity> videos = videoRepository.findAll();
+        if(authentication != null && authentication.isAuthenticated()){
+            return videos.stream()
+                    .filter(video -> {
+                        boolean isVideoPublic = video.getVisibility().getValue().equals(EVisibility.PUBLIC.getValue());
+                        boolean isVideoPrivate = video.getVisibility().getValue().equals(EVisibility.PRIVATE.getValue());
+                        return isVideoPublic || isVideoPrivate || video.getUser().getEmail().equals(authentication.getName());
+                    })
+                    .map(videoMapper::toVideoResponse)
+                    .peek(videoResponse -> videoResponse.setUrl(this.host + videoResponse.getPublicId()))
+                    .collect(Collectors.toList());
+        }else if(authentication == null){
+            return videos.stream()
+                    .filter(video -> video.getVisibility().getValue().equals(EVisibility.PUBLIC.getValue()))
+                    .map(videoMapper::toVideoResponse)
+                    .peek(videoResponse -> videoResponse.setUrl(this.host + videoResponse.getPublicId()))
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void deleteVideo(String publicId, Authentication authentication) {
+        VideoEntity videoEntity = videoRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new RuntimeException("Video not found with this id: " + publicId));
+        if(videoEntity.getUser().getEmail().equals(authentication.getName())){
+            deleteVideoFromFolder(videoEntity);
+            videoRepository.delete(videoEntity);
+        }else{
+            throw new InstaLiteException("You are not allowed to update this video.");
+        }
+    }
+
 
     private void createFolderIfNotExits(Path folder){
         boolean isFolderCreated = false;

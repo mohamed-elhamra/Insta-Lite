@@ -18,5 +18,4 @@ public interface ImageService {
     void deleteImage(String publicId, Authentication authentication);
 
     List<ImageResponse> listImages(Authentication authentication);
-
 }
