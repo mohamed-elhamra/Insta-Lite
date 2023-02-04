@@ -1,0 +1,24 @@
+<button class="add-button" (click)="createvideo()">Create</button>
+<button class="download-all-button" (click)="downlaoadAllvideos()">Download all videos</button>
+<table>
+    <thead>
+        <th>Title</th>
+        <th>Visibility</th>
+        <th>Creator</th>
+        <th>Creation Date</th>
+        <th>Actions</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let video of videos">
+            <td>{{video.title}}</td>
+            <td>{{video.visibility}}</td>
+            <td>{{video.userFirstName + " " + video.userLastName}}</td>
+            <td>{{video.creationDate | date:'dd/MM/yyyy'}}</td>
+            <td>
+                <button class="download-button" (click)="downloadvideo(video.url)">Download</button>
+                <button class="update-button" (click)="updatevideo(video.publicId, video.title, video.visibility)">Update</button>
+                <button class="delete-button" (click)="deletevideo(video.publicId)">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

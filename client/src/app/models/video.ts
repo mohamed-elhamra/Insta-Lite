@@ -1,4 +1,4 @@
-export class Image {
+export class Video {
     publicId: string;
     title: string;
     visibility: string;

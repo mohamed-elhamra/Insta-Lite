@@ -1,0 +1,10 @@
+<form (ngSubmit)="onSubmit()">
+    <input type="text" [(ngModel)]="video_title" name="video_title" placeholder="video title">
+    <select [(ngModel)]="visibility" name="visibility">
+      <option [value]="visibilityEnum.Public">Public</option>
+      <option [value]="visibilityEnum.Private">Private</option>
+      <option [value]="visibilityEnum.Hidden">Hidden</option>
+    </select>
+    <input type="file" (change)="onFileChanged($event)" accept="video/*">
+    <button type="submit">Submit</button>
+  </form>

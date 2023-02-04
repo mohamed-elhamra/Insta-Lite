@@ -11,17 +11,17 @@ export class CreateImageComponent {
     image_title: string;
     image: File;
     visibilityEnum = EVisibility;
-    visibility: EVisibility;
+    visibility: string;
     constructor(private imageService: ImageService) { }
     uploadImage() {
-        this.imageService.uploadImage(this.image_title, this.visibility.toString(), this.image).subscribe(
+        this.imageService.uploadImage(this.image_title, this.visibility, this.image).subscribe(
             data => {
                 console.log(data);
             }
         );
     }
     onFileChanged(event: any) {
-        this.image = event.target.files[0];
+        this.image = new File([event.target.files[0]], event.target.files[0].name);
     }
     onSubmit() {
         this.uploadImage();

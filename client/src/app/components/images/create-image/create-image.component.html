@@ -1,10 +1,10 @@
 <form (ngSubmit)="onSubmit()">
-    <input type="text" [(ngModel)]="image_title" placeholder="Image title">
-    <select [(ngModel)]="visibility">
+    <input type="text" [(ngModel)]="image_title" name="image_title" placeholder="Image title">
+    <select [(ngModel)]="visibility" name="visibility">
       <option [value]="visibilityEnum.Public">Public</option>
       <option [value]="visibilityEnum.Private">Private</option>
       <option [value]="visibilityEnum.Hidden">Hidden</option>
     </select>
-    <input type="file" formControlName="image" (change)="onFileChanged($event)" accept="image/*">
+    <input type="file" (change)="onFileChanged($event)" accept="image/*">
     <button type="submit">Submit</button>
   </form>
