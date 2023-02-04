@@ -20,14 +20,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.Arrays;
 
 
 @Configuration
@@ -56,6 +48,9 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.PATCH, "/images/**").hasAuthority(ERole.ROLE_ADMIN.name())
                 .antMatchers(HttpMethod.GET, "/images").permitAll()
                 .antMatchers(HttpMethod.GET, "/images/download/**").permitAll()
+                .antMatchers(HttpMethod.PATCH, "/videos/**").hasAuthority(ERole.ROLE_ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/videos").permitAll()
+                .antMatchers(HttpMethod.GET, "/videos/download/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

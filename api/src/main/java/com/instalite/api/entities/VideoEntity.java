@@ -4,6 +4,7 @@ import com.instalite.api.commons.utils.enums.EVisibility;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -28,6 +29,9 @@ public class VideoEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EVisibility visibility;
+
+    @Column(nullable = false)
+    private Date creationDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -111,22 +111,29 @@ public class ImageServiceImpl implements ImageService {
             ImageEntity imageEntity = imageRepository.findByPublicId(publicId)
                     .orElseThrow(() -> new RuntimeException("Image not found with this id: " + publicId));
             if(imageEntity.getUser().getEmail().equals(authentication.getName())){
-                if(imageRepository.findByTitle(imageTitle).isPresent() && !imageEntity.getTitle().equals(imageTitle))
+                if(imageRepository.findByTitle(imageTitle).isPresent() && !imageEntity.getTitle().equals(imageTitle)) {
                     throw new InstaLiteException("There is already an image with this title : " + imageTitle);
-
-                String imageExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
-
-                if(Constants.ALLOWED_EXTENSIONS.contains(imageExtension)){
-                    imageEntity.setTitle(imageTitle);
-                    imageEntity.setVisibility(EVisibility.fromValue(visibility));
-                    deleteImageFromFolder(imageEntity);
-                    Files.copy(image.getInputStream(), this.folder.resolve(imageEntity.getName()));
-                    ImageResponse imageResponse = imageMapper.toImageResponse(imageRepository.save(imageEntity));
-                    imageResponse.setUrl(this.host + imageResponse.getPublicId());
-                    return imageResponse;
-                }else{
-                    throw new InstaLiteException("File extension allowed (png, jpeg, jpg)");
                 }
+
+                if(imageTitle != null && !imageTitle.isEmpty() && !imageTitle.isBlank())
+                    imageEntity.setTitle(imageTitle);
+                if(visibility != null && !visibility.isEmpty() && !visibility.isBlank())
+                    imageEntity.setVisibility(EVisibility.fromValue(visibility));
+
+                if (image != null && !image.isEmpty() && !image.getOriginalFilename().isEmpty() && !image.getOriginalFilename().isBlank()) {
+                    String imageExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
+                    if (Constants.ALLOWED_EXTENSIONS.contains(imageExtension)) {
+                        deleteImageFromFolder(imageEntity);
+                        Files.copy(image.getInputStream(), this.folder.resolve(imageEntity.getName()));
+
+                    } else {
+                        throw new InstaLiteException("File extension allowed (png, jpeg, jpg)");
+                    }
+
+                }
+                ImageResponse imageResponse = imageMapper.toImageResponse(imageRepository.save(imageEntity));
+                imageResponse.setUrl(this.host + imageResponse.getPublicId());
+                return imageResponse;
             }else{
                 throw new InstaLiteException("You are not allowed to update this image.");
             }

@@ -42,7 +42,8 @@ public class ImageController {
     public ResponseEntity<ImageResponse> updateImage(@PathVariable(name = "imageId") String imageId,
                                                 @RequestParam(name= "image_title") String imageTitle,
                                                 @RequestParam("visibility") String visibility,
-                                                @RequestParam("image") MultipartFile image, Authentication authentication) {
+                                                @RequestParam(value = "image", required = false) MultipartFile image,
+                                                     Authentication authentication) {
         return ResponseEntity.accepted().body(imageService.updateImage(imageId, imageTitle, visibility, image, authentication));
     }
 

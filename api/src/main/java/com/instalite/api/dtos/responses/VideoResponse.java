@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,4 +15,8 @@ public class VideoResponse {
     private String title;
     private EVisibility visibility;
     private String url;
+    private Date creationDate;
+    private String userPublicId;
+    private String userFirstName;
+    private String userLastName;
 }
