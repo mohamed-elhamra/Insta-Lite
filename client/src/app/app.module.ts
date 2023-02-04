@@ -10,12 +10,18 @@ import { RegisterComponent } from './register/register.component';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
+import { UserListComponent } from './user-list/user-list.component';
+import { UserUpdateComponent } from './user-update/user-update.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    UserListComponent,
+    UserUpdateComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
