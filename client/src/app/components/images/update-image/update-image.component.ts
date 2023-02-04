@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageService } from 'src/app/_services/image.service';
 import { Image } from 'src/app/models/image';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EVisibility } from 'src/app/models/evisibility';
 
 @Component({
@@ -16,7 +16,7 @@ visibilityEnum = EVisibility;
 image: File = new File([], '');
 visibility: string;
 
-  constructor(private imageService: ImageService,
+  constructor(private imageService: ImageService, private router: Router,
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -32,6 +32,7 @@ visibility: string;
     this.imageService.updateImage(this.id, this.image_title, this.visibility, this.image).subscribe(
         data => {
             console.log(data);
+            this.gotoList();
         }
     );
 }
@@ -42,4 +43,7 @@ onSubmit() {
     this.updateImage();
 }
 
+gotoList() {
+  this.router.navigate(['/image']);
+}
 }

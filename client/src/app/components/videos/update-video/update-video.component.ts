@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VideoService } from 'src/app/_services/video.service';
 import { Video } from 'src/app/models/video';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EVisibility } from 'src/app/models/evisibility';
 
 @Component({
@@ -16,7 +16,7 @@ visibilityEnum = EVisibility;
 video: File = new File([], '');
 visibility: string;
 
-  constructor(private videoService: VideoService,
+  constructor(private videoService: VideoService, private router: Router,
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -32,6 +32,7 @@ visibility: string;
     this.videoService.updateVideo(this.id, this.video_title, this.visibility, this.video).subscribe(
         data => {
             console.log(data);
+            this.gotoList();
         }
     );
 }
@@ -40,6 +41,10 @@ onFileChanged(event: any) {
 }
 onSubmit() {
     this.updatevideo();
+}
+
+gotoList() {
+  this.router.navigate(['/video']);
 }
 
 }
